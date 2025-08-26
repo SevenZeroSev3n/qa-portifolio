@@ -1,0 +1,13 @@
+Título: [ALTA] Checkout falha ao aplicar cupom válido
+Ambiente: Web, Chrome (versão), Windows 10
+Pré-condições: Produto no carrinho; cupom ABC10 ativo
+Passos para reproduzir:
+  1) Abrir carrinho
+  2) Inserir cupom "ABC10"
+  3) Clicar "Aplicar"
+Resultado esperado: Desconto de 10% aplicado; total atualizado
+Resultado atual: Botão fica carregando; total não muda
+Evidências: (screenshot/vídeo futuro em evidence/BR-CUPOM-001.mp4)
+Frequência: 3/3 tentativas
+Severidade: Alta
+Observação inicial: checar resposta HTTP da rota /apply-coupon e tratamento de erro no front

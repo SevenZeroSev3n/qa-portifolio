@@ -1,6 +1,8 @@
 ﻿name: E2E (Playwright Python)
 
-on: [push, pull_request]
+on:
+  push:
+  pull_request:
 
 jobs:
   tests:
@@ -11,9 +13,11 @@ jobs:
         browser: [chromium, firefox, webkit]
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
 
-      - uses: actions/setup-python@v5
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
@@ -23,7 +27,7 @@ jobs:
           pip install -r requirements.txt
           python -m playwright install --with-deps
 
-      - name: Debug: show versions & plugins
+      - name: Debug - show versions & plugins
         run: |
           python -V
           python -m pip list
@@ -47,4 +51,5 @@ jobs:
         with:
           name: e2e-${{ matrix.browser }}
           if-no-files-found: warn
-          path: reports/${{ matrix.browser }}/report.html
+          path: |
+            reports/${{ matrix.browser }}/report.html

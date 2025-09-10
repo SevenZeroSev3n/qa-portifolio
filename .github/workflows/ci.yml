@@ -1,0 +1,43 @@
+﻿name: E2E (Playwright Python)
+
+on: [push, pull_request]
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install deps
+        run: |
+          python -m pip install -U pip
+          pip install -r requirements.txt
+          python -m playwright install --with-deps
+
+      - name: Run tests (${{ matrix.browser }})
+        run: |
+          mkdir -p reports/${{ matrix.browser }}
+          python -m pytest -q tests/test_wikipedia_search.py `
+            --browser ${{ matrix.browser }} `
+            --tracing retain-on-failure `
+            --video retain-on-failure `
+            --screenshot only-on-failure `
+            --html=reports/${{ matrix.browser }}/report.html --self-contained-html
+
+      - name: Upload artifacts (${{ matrix.browser }})
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: e2e-${{ matrix.browser }}
+          path: |
+            reports/${{ matrix.browser }}/report.html
+            test-results/

@@ -1,0 +1,4 @@
+﻿pytest
+pytest-playwright
+playwright
+pytest-html
